@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #4a2419;
+            margin: 0;
+            padding: 50px;
+        }
+
+        .container {
+            background: #a67b5b;
+            padding: 20px;
+            margin: auto;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0px 0px 10px #4f0147;
+            border-radius: 20px;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: black;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .btn {
+            font-size: 40px;
+            padding: 10px;
+            border: 3px solid #4f0147;
+            background: #260701;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0px 0px 20px whitesmoke;
+            transition: transform 0.2s ease, background 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            background: #fed8b1;
+        }
+
+        .score-table, .score-board {
+            margin: 20px auto;
+            width: 100%;
+            max-width: 300px;
+            border-collapse: collapse;
+        }
+
+        .score-table td, .score-board td {
+            padding: 10px;
+            border: 3px solid #a67b5b;
+            text-align: center;
+        }
+
+        .score-table p {
+            font-size: 50px;
+            margin: 0;
+        }
+
+        .reset-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 3px solid #260701;
+            background: #260701;
+            color: whitesmoke;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-radius: 20px;
+            box-shadow: 0px 0px 20px whitesmoke;
+        }
+
+        .reset-btn:hover {
+            background: #f3d17c;
+            color: red;
+        }
+
+        @media (max-width: 480px) {
+            .btn {
+                font-size: 30px;
+                padding: 8px;
+            }
+            .score-table p {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>ROCK-PAPER-SCISSORS</h3>
+        <div class="button-group">
+            <button class="btn" onclick="play('Rock')">✊</button>
+            <button class="btn" onclick="play('Paper')">✋</button>
+            <button class="btn" onclick="play('Scissors')">✌</button>
+        </div>
+        <p id="game-result">-</p>
+        <table class="score-table">
+            <tr>
+                <td>You</td>
+                <td>Computer</td>
+            </tr>
+            <tr>
+                <td><p id="user-choice">-</p></td>
+                <td><p id="computer-choice">-</p></td>
+            </tr>
+        </table>
+        <table class="score-board">
+            <tr>
+                <td class="count">Wins: 0</td>
+                <td class="count">Losses: 0</td>
+                <td class="count">Ties: 0</td>
+            </tr>
+        </table>
+        <button class="reset-btn" onclick="reset()">Reset</button>
+    </div>
+    <script>
+        const user_choice = document.getElementById('user-choice');
+        const computer_choice = document.getElementById('computer-choice');
+        const game_result = document.getElementById('game-result');
+        const count = document.getElementsByClassName('count');
+        let wins = 0, losses = 0, ties = 0;
+        let matches = 0;
+
+        const emojiMap = {
+            "Rock": "✊",
+            "Paper": "✋",
+            "Scissors": "✌"
+        };
+
+        function play(user_cho) {
+            matches++;
+            let comp_cho = getRandom();
+
+            user_choice.innerHTML = emojiMap[user_cho]; 
+            computer_choice.innerHTML = emojiMap[comp_cho]; 
+
+            let resultText = '';
+            if (
+                (user_cho === 'Rock' && comp_cho === 'Scissors') || 
+                (user_cho === 'Paper' && comp_cho === 'Rock') || 
+                (user_cho === 'Scissors' && comp_cho === 'Paper')
+            ) {
+                resultText = 'You Win! ';
+                wins++;
+            } else if (user_cho === comp_cho) {
+                resultText = 'It\'s a Tie! ';
+                ties++;
+            } else {
+                resultText = 'You Lose! ';
+                losses++;
+            }
+
+            game_result.innerHTML = resultText;
+            count[0].innerHTML = `Wins ${wins}`;
+            count[1].innerHTML = `Losses ${losses}`;
+            count[2].innerHTML = `Ties ${ties}`;
+
+            if (matches === 5) {
+                setTimeout(() => {
+                    if (wins > losses) {
+                        alert('🏆 You win the match!');
+                    } else if (losses > wins) {
+                        alert('😞 You lost the match!');
+                    } else {
+                        alert('🤝 It\'s a tie!');
+                    }
+                    reset();
+                }, 300);
+            }
+        }
+
+        function reset() {
+            wins = 0;
+            losses = 0;
+            ties = 0;
+            matches = 0;
+
+            count[0].innerHTML = `Wins ${wins}`;
+            count[1].innerHTML = `Losses ${losses}`;
+            count[2].innerHTML = `Ties ${ties}`;
+
+            game_result.innerHTML = '-';
+            user_choice.innerHTML = '-';
+            computer_choice.innerHTML = '-';
+            alert('🔄 Game reset successfully');
+        }
+
+        function getRandom() {
+            let choices = ['Rock', 'Paper', 'Scissors'];
+            return choices[Math.floor(Math.random() * 3)];
+        }
+    </script>
+</body>
+</html>
